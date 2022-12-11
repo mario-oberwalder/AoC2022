@@ -74,15 +74,26 @@ pub fn process_part2(input: &str) -> String {
         .map(|x| x.clone())
         .collect();
 
-
     let mut pixels: String = "".to_string();
 
-    for i in 0..cycles.len() {
-        if i % 40 == 0 {
-            pixels = pixels.clone().add("\n");
-        }
-        pixels = pixels.clone().add(&parse_to_pixel(*cycles.get(i).unwrap()));
-    }
+    let mut pixelpositionvalues:Vec<i32> = signalintensities.clone();
+    pixelpositionvalues.insert(0,0);
+
+    pixels = pixelpositionvalues.iter()
+        .enumerate()
+        .map(|(number,value )| {
+            if (number % 40) == *value as usize || (number % 40) == (*value-1) as usize || (number % 40) == (*value +1) as usize{
+                "#"
+            } else {"."}
+        })
+        .collect();
+
+    pixels = pixels.chars()
+        .collect::<Vec<char>>()
+        .chunks(40)
+        .map(|char| char.iter().collect::<String>())
+        .collect::<Vec<String>>()
+        .join("\n");
 
     return pixels;
 }
